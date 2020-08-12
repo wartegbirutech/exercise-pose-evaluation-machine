@@ -66,6 +66,7 @@ for type_name in CLASS_TYPE:
     n_hidden = 22
     n_classes = 3
 
+    # pair of lstm cell initialization through loop
     lstm_cells = [LSTMCell(
         n_hidden,
         activation='relu',
@@ -77,8 +78,7 @@ for type_name in CLASS_TYPE:
 
 
     model = Sequential()
-    model.add(Permute((1, 2, 3), input_shape = (None, 24, 48)))
-    model.add(Reshape((-1, 28), input_shape = (None, 24, 48)))
     model.add(lstm_layer)
+
 
     print(model.summary())

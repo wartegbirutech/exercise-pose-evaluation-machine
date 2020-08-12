@@ -1,6 +1,8 @@
 import os
 import time
 import random
+
+# Set minimum logging to level 3 to prevent noisy command line
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
 import collections
@@ -18,34 +20,46 @@ from tensorflow.keras import layers
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.layers import TimeDistributed, Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 
-tf.reset_default_graph()
+# Set minimal logging level to Errors only
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
+# Define number of training steps
 n_steps = 24
 
+# Define Tensorflow checkpoint path
 checkpoint_path = "/home/kevin/projects/exercise_pose_evaluation_machine/models/lstm_model/lstm_model.ckpt"
 
 def LSTM_RNN(_X, _weights, _biases):
-    # model architecture based on "guillaume-chevalier" and "aymericdamien" under the MIT license.
+    # Model architecture based on "guillaume-chevalier" and "aymericdamien" under the MIT license.
     _X = tf.transpose(_X, [1, 0, 2])  # permute n_steps and batch_size
-    _X = tf.reshape(_X, [-1, n_input])   
-
+    _X = tf.reshape(_X, [-1, n_input])  
+    
     # Rectifies Linear Unit activation function used
     _X = tf.nn.relu(tf.matmul(_X, _weights['hidden']) + _biases['hidden'])
+    
+    
     # Split data because rnn cell needs a list of inputs for the RNN inner loop
-    _X = tf.split(_X, n_steps, 0) 
+    _X = tf.split(_X, n_steps, 0)
 
     # Define two stacked LSTM cells (two recurrent layers deep) with tensorflow
     lstm_cell_1 = tf.contrib.rnn.BasicLSTMCell(n_hidden, forget_bias=1.0, state_is_tuple=True)
     lstm_cell_2 = tf.contrib.rnn.BasicLSTMCell(n_hidden, forget_bias=1.0, state_is_tuple=True)
     lstm_cells = tf.contrib.rnn.MultiRNNCell([lstm_cell_1, lstm_cell_2], state_is_tuple=True)
     outputs, states = tf.contrib.rnn.static_rnn(lstm_cells, _X, dtype=tf.float32)
+    
 
     # A single output is produced, in style of "many to one" classifier, refer to http://karpathy.github.io/2015/05/21/rnn-effectiveness/ for details
     lstm_last_output = outputs[-1]
     
-    # Linear activation
     
+
+    print(tf.math.add(
+        tf.matmul(lstm_last_output, _weights['out']),
+        _biases['out'],
+        name='predict'
+    ))
+    import time 
+    time.sleep(20)
     return tf.math.add(
         tf.matmul(lstm_last_output, _weights['out']),
         _biases['out'],
@@ -56,9 +70,9 @@ def extract_batch_size(_train, _labels, _unsampled, batch_size):
     # Fetch a "batch_size" amount of data and labels from "(X|y)_train" data. 
     # Elements of each batch are chosen randomly, without replacement, from X_train with corresponding label from Y_train
     # unsampled_indices keeps track of sampled data ensuring non-replacement. Resets when remaining datapoints < batch_size    
-    
     _unsampled = list(_unsampled)
 
+    # Extract train labels and batch shape
     _train = np.array(_train)
     shape = list(_train.shape)
     shape[0] = batch_size
@@ -94,19 +108,15 @@ CLASS_TYPE = [
 for type_name in CLASS_TYPE:
     # Get original dataset
     x, y = get_dataset(type_name)
+
     # Fill original class type with the label 1
     y = [1 for label in y]
 
     # Get negative dataset
-    neg_x, neg_y = get_dataset("plank2")
+    neg_x, neg_y = get_dataset("not-" + type_name)
+
     # Fill original class type with the label 1
     neg_y = [0 for label in neg_y]
-    x.extend(neg_x)
-    y.extend(neg_y)
-
-    # Get negative dataset
-    neg_x, neg_y = get_dataset("situp2")
-    neg_y = [2 for label in neg_y]
     x.extend(neg_x)
     y.extend(neg_y)
 

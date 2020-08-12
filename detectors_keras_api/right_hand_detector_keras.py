@@ -82,14 +82,33 @@ def load_saved_model(model_path):
     raise Exception('model does not exist')
 
 
+class RightHandUpDetector:
+    def __init__(self):
+        MODEL_PATH = 'models/right_hand_up/right_hand_up.h5'
+        self.model = load_saved_model(MODEL_PATH)
+    
+    '''
+    predict
+    @param {np.array} data - 1 row matrix of upper body keypoints with shape (1, 16)
+    '''
+    def predict(self, data):
+        try:
+            assert data.shape == (1, 16)
+            prediction = self.model.predict(data)
+            # prediction < 0.35 == right hand up
+            # 0.35 >= prediction == not right hand up
+            return 1 if prediction[0][0] < 0.35 else 0
+        except Exception as e:
+            print(e)
+
+
+
 if __name__ == '__main__':
     X_train, X_test, y_train, y_test = get_dataset()
     MODEL_PATH = 'models/right_hand_up/right_hand_up.h5'
     
     try:
-        '''
-        Try load model
-        '''
+        # Try load model
         model = load_saved_model(MODEL_PATH)
         model.summary()
 
@@ -100,9 +119,7 @@ if __name__ == '__main__':
         print('model prediction is ', 1 if prediction[0][0] > 0.5 else 0)
         print('correct label should be ', single_correct_label)
     except Exception as e:
-        '''
-        If no model, create new model, train, and save
-        '''
+        # If no model, create new model, train, and save
         model = create_model()
         model.summary()
         model.fit(X_train, y_train, epochs=500, batch_size=10)

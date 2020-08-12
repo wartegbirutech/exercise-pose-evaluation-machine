@@ -6,9 +6,10 @@ import matplotlib.pyplot as plt
 from list_manipulator import pop_all
 from sklearn.preprocessing import MinMaxScaler
 from data_preproccess.plot_body_part_positions import plot_body_part_positions
-from keypoints_extractor import normalize_keypoints_for_plot_kps, KeypointsExtractor
+
 from kp_index import get_kp_index_by_int
 
+from keypoints_extractor import normalize_keypoints_for_plot_kps, KeypointsExtractor, make_min_max_scaler, normalize_keypoints_from_external_scaler
 
 # KP ordering of body parts
 NOSE        = 0
@@ -37,79 +38,7 @@ R_BIG_TOE   = 22
 R_SMALL_TOE = 23
 R_HEEL      = 24
 
-
-'''
-make_min_max_scaler
-'''
-# Get normalized keypoints
-def make_min_max_scaler(keypoint_frames, x_low, y_low):
-    # Define normalized keypoints array
-    all_keypoints = []
-    # Define normalized keypoints array for each frames
-    nom_keypoint_frame = []
-    try:
-        for i, _ in enumerate(keypoint_frames):
-            # Define temporary array for normalized keypoints 
-            # (To be appended to normalized frame keypoints array)
-            nom_keypoint = []
-            for count, kp in enumerate(_):
-                # Avoid x=0 and y=0 because some keypoints that are not discovered
-                # If x=0 and y=0 than it doesn't need to be substracted with the
-                # lowest x and y points
-                if kp['x'] != 0 and kp['y'] != 0:
-                    x = kp['x'] - x_low
-                    y = kp['y'] - y_low
-                    nom_keypoint.append([x,y])
-                    all_keypoints.append([x,y])
-                else:
-                    nom_keypoint.append([kp['x'], kp['y']])
-                    all_keypoints.append([kp['x'], kp['y']])
-            
-            # Add keypoints for the selected frame to the array
-            nom_keypoint_frame.append(nom_keypoint)
-    except Exception as e:
-        print(str(e))
-        
-    # Normalize data between 0 to 1
-    scaler = MinMaxScaler(feature_range=(0,1))
-
-    # Fit the scaler according to all the keypoints
-    # From all the frames
-    scaler.fit(all_keypoints)
-
-    # Return normalized keypoint frames
-    return scaler
-
-
-'''
-normalize_keypoints_from_external_scaler
-'''
-# Get normalized keypoints
-def normalize_keypoints_from_external_scaler(keypoint_frames, scaler):
-    # Define normalized keypoints array for each frames
-    nom_keypoint_frame = []
-    try:
-        for i, _ in enumerate(keypoint_frames):
-            # Define temporary array for normalized keypoints 
-            # (To be appended to normalized frame keypoints array)
-            nom_keypoint = []
-            for count, kp in enumerate(_):
-                nom_keypoint.append([kp['x'], kp['y']])
-            
-            # Add keypoints for the selected frame to the array
-            nom_keypoint_frame.append(nom_keypoint)
-    except Exception as e:
-        print(str(e))
-
-    # Define MinMax'ed keypoints for each frame
-    min_max_keypoint_frame = []
-    for x in nom_keypoint_frame:
-        ret_val = scaler.transform(x) # ret_val is an array of keypoints (in other words Frames)
-        min_max_keypoint_frame.append(ret_val)
-
-    # Return normalized keypoint frames
-    return min_max_keypoint_frame
-
+# Setup plot
 def setup_plot(axs, idx, body_part_name):
     # Define the matplot settings
     axs[idx, 0].set_title(f'{body_part_name} x movements')
@@ -203,6 +132,7 @@ if __name__ == '__main__':
     # video_paths = [f'{plank_dir}/{file}' for file in os.listdir(plank_dir) ]
     video_paths = [f'{situp_dir}/{file}' for file in os.listdir(situp_dir) ]
 
+    # Set from 
     sets = []
     all_exercise_reps = []
     all_exercise_x_low = []
@@ -220,6 +150,7 @@ if __name__ == '__main__':
         # Add to sets
         sets.append(exercise_reps)
 
+    # Make min max scaler and save
     scaler = make_min_max_scaler(all_exercise_reps, min(all_exercise_x_low), min(all_exercise_y_low))
 
     normalized_sets = []

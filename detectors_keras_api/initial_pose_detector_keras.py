@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 import collections
 
-from tensorflow.keras.models import Sequential
+from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import Dense, Dropout
 
 from deep_sort import nn_matching
@@ -18,6 +18,48 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.model_selection import train_test_split
 
 from keypoints_extractor import KeypointsExtractor
+
+def load_saved_model(model_path):
+    if os.path.isfile(model_path):
+        model = load_model(model_path)
+        return model
+    raise Exception('model does not exist')
+
+
+class InitialPoseDetector:
+    def __init__(self):
+        MODEL_PATH = 'models/initial_pose_model/initial_pose_model.h5'
+        self.model = load_saved_model(MODEL_PATH)
+
+    def predict(self, data):
+        try:
+            assert data.shape == (1, 28)
+            prediction = self.model.predict(data)
+            return self.get_exercise_name_from_prediction(prediction)
+        except Exception as e:
+            print(e)
+
+    '''
+    Result lookup
+
+    #plank -> 0
+    #situps -> 1
+    #dumbell-curl -> 2
+    #pushup -> 3
+    '''
+    def get_exercise_name_from_prediction(self, prediction):
+        res_lookup = ['plank', 'sit-up', 'dumbell-curl', 'push-up']
+        # prediction shape is (1, 4)
+        exercise_index = np.argmax(prediction[0])
+        return res_lookup[exercise_index]
+
+        try:
+            assert data.shape == (1, 28)
+            prediction = self.model.predict(data)
+            return self.get_exercise_name_from_prediction(prediction)
+        except Exception as e:
+            print(e)
+
 
 if __name__ == '__main__':
     # Initialize paths
@@ -61,6 +103,7 @@ if __name__ == '__main__':
 
     # Define number of features, labels, and hidden
     num_features = 28 # 14 pairs of (x, y) keypoints
+    num_hidden = 8
     num_labels = 4
     
     '''
@@ -69,13 +112,13 @@ if __name__ == '__main__':
     # Builds an ANN model for keypoint predictions
     @params {list of labels} image prediction labels to be tested
     @params {integer} number of features
-    @params {integer} number of labels
+    @params {integer} number of labels as output
     @params {integer} number of hidden layers
     '''
     model = Sequential()
     model.add(Dropout(0.2, input_shape=(num_features,)))
     model.add(Dense(12, activation='relu'))
-    model.add(Dense(8, activation='relu'))
+    model.add(Dense(num_hidden, activation='relu'))
     model.add(Dense(num_labels, activation='softmax'))
     model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy'])
     
@@ -96,12 +139,26 @@ if __name__ == '__main__':
     keypoints = np.array(keypoints).flatten().astype(np.float32)
 
     '''
-    plank -> 0
-    situps -> 1
-    dumbell-curl -> 2
-    pushup -> 3
+    Result lookup
+
+    #plank -> 0
+    #situps -> 1
+    #dumbell-curl -> 2
+    #pushup -> 3
     '''
     res_lookup = ['plank', 'sit-up', 'dumbell-curl', 'push-up']
-    print("Result is " + res_lookup[np.argmax(model.predict(np.array([keypoints])))])
+    print("Result is " + res_lookup[
+        np.argmax(
+            model.predict(
+                np.array(
+                    [
+                        keypoints
+                    ]
+                )
+            )
+        )
+    ])
+
+    # Save model to the designated path
     model.save(save_path)
     print("Saved model")

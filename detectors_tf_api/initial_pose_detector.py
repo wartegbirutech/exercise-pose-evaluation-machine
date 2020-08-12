@@ -79,8 +79,8 @@ if __name__ == '__main__':
         tf_data = tf.placeholder(tf.float32, shape=(None, num_features), name= "tf_data")
         tf_labels = tf.constant(y_train)
         
-        # Note, since there is only 1 layer there are actually no hidden layers... but if there were
-        # there would be num_hidden
+        # Note, since there is only 1 layer there are actually no hidden layers... 
+        # but if there were there would be num_hidden
         weights_1 = tf.Variable(tf.truncated_normal([num_features, num_hidden]))
         weights_2 = tf.Variable(tf.truncated_normal([num_hidden, num_labels]))
 
@@ -88,10 +88,12 @@ if __name__ == '__main__':
         bias_1 = tf.Variable(tf.zeros([num_hidden]))
         bias_2 = tf.Variable(tf.zeros([num_labels]))
         
+        # Make neural network
         logits_1 = tf.matmul(tf_data , weights_1 ) + bias_1
         rel_1 = tf.nn.relu(logits_1)
         logits_2 = tf.matmul(rel_1, weights_2) + bias_2
         
+        # Apply softmax cross entropy as loss and gradient descent optimizer
         loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits_2,  labels=tf_labels), name= "loss")
         optimizer = tf.train.GradientDescentOptimizer(.005, name="optimizer").minimize(loss)
         
@@ -105,6 +107,7 @@ if __name__ == '__main__':
 
     # Epochs
     num_steps = 10000
+
     # Run training session
     with tf.Session(graph = graph) as session:
         tf.initialize_all_variables().run()

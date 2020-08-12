@@ -9,8 +9,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.model_selection import train_test_split
 
-from keypoints_extractor import KeypointsExtractor, normalize_keypoints
-from plot_kps import normalize_keypoints_from_external_scaler, make_min_max_scaler
+from keypoints_extractor import KeypointsExtractor, normalize_keypoints, normalize_keypoints_from_external_scaler, make_min_max_scaler
 from predict_init_pose import predict_initial_pose
 
 import tensorflow as tf
