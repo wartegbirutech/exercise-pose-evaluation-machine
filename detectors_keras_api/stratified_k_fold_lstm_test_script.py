@@ -119,10 +119,13 @@ def train(type_name, filename, n_hidden, lstm_layer, dropout, epoch, batch_size,
             activation='sigmoid',
             kernel_regularizer=regularizers.l2(0.01),
             activity_regularizer=regularizers.l1(0.01)))
-        model.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=['accuracy'])
+        model.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=['accuracy']).
+        
+        # simple early stopping
+        es = EarlyStopping(monitor='val_loss', mode='min', verbose=1)
         
         # Train model
-        model.fit(x_train, y_train, epochs=epoch, batch_size=batch_size, shuffle = True, validation_data = (x_test, y_test), validation_split = 0.4, callbacks=[ForceGarbageCollection()])
+        model.fit(x_train, y_train, epochs=epoch, batch_size=batch_size, shuffle = True, validation_data = (x_test, y_test), validation_split = 0.4, callbacks=[ForceGarbageCollection(), es])
 
         # Print model stats
         print(model.summary())
@@ -176,8 +179,8 @@ if __name__ == '__main__':
 
     def run(type_name, x, y):
         lstm_layers = [2,3,4]
-        dropouts = [0.3, 0.4, 0.5, 0.6]
-        epochs = [200, 250, 300]
+        dropouts = [0.3, 0.5]
+        epochs = [450]
         batch_sizes = [100, 150, 200]
 
         for lstm_layer in lstm_layers:
