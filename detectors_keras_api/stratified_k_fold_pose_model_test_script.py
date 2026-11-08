@@ -1,4 +1,8 @@
 import os
+# Repo root and dataset folder (override with EPEM_ROOT / EPEM_DATA_DIR).
+REPO_ROOT = os.environ.get("EPEM_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+DATA_DIR = os.environ.get("EPEM_DATA_DIR", os.path.join(os.path.dirname(REPO_ROOT), "exercise-pose-data"))
+import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import csv
 import cv2
@@ -13,7 +17,7 @@ from datetime import datetime
 from tensorflow.keras import regularizers
 
 import sys
-sys.path.append('/home/kevin/projects/exercise_pose_evaluation_machine/')
+sys.path.append(REPO_ROOT)
 
 import collections
 import random
@@ -70,7 +74,7 @@ def train(exercise_name, epochs, batch_size, double, dataset):
         y.append(label)
 
     # Initialize paths
-    base_path = "/home/kevin/projects/initial-pose-data/train_data"
+    base_path = os.path.join(DATA_DIR, "initial-pose-data/train_data")
     date_string = datetime.now().isoformat()
     filename = f'{exercise_name}_{epochs}_epochs_{batch_size}_batch_size_2x30 binary pose k-fold results {date_string}' if double else f'{exercise_name}_{epochs}_epochs_{batch_size}_batch_size binary pose k-fold results {date_string}'
 
@@ -159,7 +163,7 @@ if __name__ == '__main__':
             name += '_2x30'
         date_string = datetime.now().isoformat()
         print("Starting " + name)
-        log_dir = "/home/kevin/projects/exercise_pose_evaluation_machine/k_fold_results/training_logs/"
+        log_dir = os.path.join(REPO_ROOT, "k_fold_results/training_logs/")
         sys.stdout= open(os.path.join(log_dir, f'{name}-binary-pose-{date_string}.txt'), 'w')
         train(type_name, epoch, batch_size, double, dataset)
         print("Exiting " + name)

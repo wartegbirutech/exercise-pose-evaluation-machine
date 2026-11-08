@@ -1,5 +1,9 @@
+import os
+# Repo root and dataset folder (override with EPEM_ROOT / EPEM_DATA_DIR).
+REPO_ROOT = os.environ.get("EPEM_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+DATA_DIR = os.environ.get("EPEM_DATA_DIR", os.path.join(os.path.dirname(REPO_ROOT), "exercise-pose-data"))
 import sys
-sys.path.append('/home/kevin/projects/exercise_pose_evaluation_machine/')
+sys.path.append(REPO_ROOT)
 import os
 import cv2
 from keypoints_extractor import KeypointsExtractor
@@ -20,7 +24,7 @@ def run():
     # Initialize keypoints extractor
     kp_extractor = KeypointsExtractor()
 
-    base_path = "/home/kevin/projects/initial-pose-data/images/pos-negs"
+    base_path = os.path.join(DATA_DIR, "initial-pose-data/images/pos-negs")
     for exercise_name in os.listdir(base_path):
         exercise_dir = os.path.join(base_path, exercise_name)
         for posneg in os.listdir(exercise_dir):

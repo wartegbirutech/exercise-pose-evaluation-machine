@@ -1,7 +1,11 @@
 import os
+# Repo root and dataset folder (override with EPEM_ROOT / EPEM_DATA_DIR).
+REPO_ROOT = os.environ.get("EPEM_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+DATA_DIR = os.environ.get("EPEM_DATA_DIR", os.path.join(os.path.dirname(REPO_ROOT), "exercise-pose-data"))
+import os
 
 import sys
-sys.path.append("/home/binus/projects/exercise-pose-evaluation-machine")
+sys.path.append(REPO_ROOT)
 
 import csv
 import numpy as np
@@ -29,7 +33,7 @@ if __name__ == "__main__":
     from multiprocessing import Process
 
     # Initialize logs path
-    log_path = '/home/binus/projects/exercise-pose-evaluation-machine/selected_result'
+    log_path = os.path.join(REPO_ROOT, 'selected_result')
     
     # Get all files from folder
     model_type_list = os.listdir(log_path)

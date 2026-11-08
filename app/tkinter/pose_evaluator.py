@@ -1,3 +1,7 @@
+import os
+# Repo root and dataset folder (override with EPEM_ROOT / EPEM_DATA_DIR).
+REPO_ROOT = os.environ.get("EPEM_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+DATA_DIR = os.environ.get("EPEM_DATA_DIR", os.path.join(os.path.dirname(REPO_ROOT), "exercise-pose-data"))
 # This will import all the widgets 
 # and modules which are available in 
 # tkinter and ttk module 
@@ -9,7 +13,7 @@ from tkinter.ttk import *
 from tkinter import messagebox
 from PIL import ImageTk, Image
 
-sys.path.append('/home/kevin/projects/exercise_pose_evaluation_machine')
+sys.path.append(REPO_ROOT)
 from posemachine import PoseMachine
 from list_manipulator import get_exact_frames, pop_all
 from detectors_keras_api.lstm_model_keras import ExerciseEvaluator

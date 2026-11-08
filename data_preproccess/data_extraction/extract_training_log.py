@@ -1,7 +1,11 @@
 import os
+# Repo root and dataset folder (override with EPEM_ROOT / EPEM_DATA_DIR).
+REPO_ROOT = os.environ.get("EPEM_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+DATA_DIR = os.environ.get("EPEM_DATA_DIR", os.path.join(os.path.dirname(REPO_ROOT), "exercise-pose-data"))
+import os
 
 import sys
-sys.path.append("/home/kevin/projects/exercise_pose_evaluation_machine")
+sys.path.append(REPO_ROOT)
 
 import csv
 import numpy as np
@@ -12,7 +16,7 @@ from data_preproccess.data_extraction.extract_k_fold_log import chunk_it, get_lo
 
 # Write headers
 def write_header(folder, filename):
-    base_path = '/home/kevin/projects/exercise_pose_evaluation_machine'
+    base_path = REPO_ROOT
     if not os.path.exists(f'{base_path}/process_results/training'):
         os.mkdir(f'{base_path}/process_results/training')
     if not os.path.exists(f'{base_path}/process_results/training/{folder}'):
@@ -25,7 +29,7 @@ def write_header(folder, filename):
 
 # Write headers
 def write_body(folder, filename, data):
-    base_path = '/home/kevin/projects/exercise_pose_evaluation_machine'
+    base_path = REPO_ROOT
     if not os.path.exists(f'{base_path}/process_results/training'):
         os.mkdir(f'{base_path}/process_results/training')
     if not os.path.exists(f'{base_path}/process_results/training/{folder}'):
@@ -38,7 +42,7 @@ def write_body(folder, filename, data):
         
 # Plot the data into an image
 def plot_log_and_save(folder, filename, d):
-    base_path = '/home/kevin/projects/exercise_pose_evaluation_machine'
+    base_path = REPO_ROOT
     if not os.path.exists(f'{base_path}/process_results/training'):
         os.mkdir(f'{base_path}/process_results/training')
     if not os.path.exists(f'{base_path}/process_results/training/{folder}'):
@@ -86,7 +90,7 @@ if __name__ == "__main__":
     from multiprocessing import Process
 
     # Initialize logs path
-    log_path = '/home/kevin/projects/exercise_pose_evaluation_machine/models/training_logs/'
+    log_path = os.path.join(REPO_ROOT, 'models/training_logs/')
     
     # Get all files from folder
     file_list = os.listdir(log_path)

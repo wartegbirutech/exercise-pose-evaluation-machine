@@ -1,3 +1,7 @@
+import os
+# Repo root and dataset folder (override with EPEM_ROOT / EPEM_DATA_DIR).
+REPO_ROOT = os.environ.get("EPEM_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+DATA_DIR = os.environ.get("EPEM_DATA_DIR", os.path.join(os.path.dirname(REPO_ROOT), "exercise-pose-data"))
 import warnings
 warnings.simplefilter("ignore")
 
@@ -9,7 +13,7 @@ import collections
 from datetime import datetime
 
 import sys
-sys.path.append('/home/kevin/projects/exercise_pose_evaluation_machine/')
+sys.path.append(REPO_ROOT)
 
 from tensorflow.keras.layers import Dense, Dropout
 from tensorflow.keras.models import Sequential, load_model
@@ -56,8 +60,8 @@ def load_saved_model(model_path):
 
 class PoseDetector:
     def __init__(self, exercise_name):
-        MODEL_PATH = '/home/kevin/projects/exercise_pose_evaluation_machine/models/pose_model/' + str(exercise_name) + '/' + str(exercise_name) + '_pose_model.h5'
-        # MODEL_PATH = '/home/kevin/projects/exercise_pose_evaluation_machine/models/pose_model_v2/' + str(exercise_name) + '/' + str(exercise_name) + '_pose_model.h5'
+        MODEL_PATH = os.path.join(REPO_ROOT, 'models/pose_model/') + str(exercise_name) + '/' + str(exercise_name) + '_pose_model.h5'
+        # MODEL_PATH = os.path.join(REPO_ROOT, 'models/pose_model_v2/') + str(exercise_name) + '/' + str(exercise_name) + '_pose_model.h5'
         self.model = load_saved_model(MODEL_PATH)
 
     def predict(self, data):
@@ -73,7 +77,7 @@ def test():
     pose_detector = PoseDetector("squat")
     kp_extractor = KeypointsExtractor()
     
-    file_path = '/home/kevin/projects/initial-pose-data/images/v1/pos-negs/squat/pos/mirrored-VID_20200928_134747.mp4_186.jpg'
+    file_path = os.path.join(DATA_DIR, 'initial-pose-data/images/v1/pos-negs/squat/pos/mirrored-VID_20200928_134747.mp4_186.jpg')
     # Opening OpenCV stream
     stream = cv2.VideoCapture(file_path)
     while True:
@@ -91,8 +95,8 @@ def test():
 
 def train(exercise_name, dataset):
     # Initialize save path
-    save_path = '/home/kevin/projects/exercise_pose_evaluation_machine/models/pose_model'
-    # save_path = '/home/kevin/projects/exercise_pose_evaluation_machine/models/pose_model_v2'
+    save_path = os.path.join(REPO_ROOT, 'models/pose_model')
+    # save_path = os.path.join(REPO_ROOT, 'models/pose_model_v2')
     if not os.path.exists(save_path):
         os.makedirs(save_path)
     save_path += '/' + str(exercise_name)

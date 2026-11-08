@@ -1,4 +1,8 @@
 import os
+# Repo root and dataset folder (override with EPEM_ROOT / EPEM_DATA_DIR).
+REPO_ROOT = os.environ.get("EPEM_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+DATA_DIR = os.environ.get("EPEM_DATA_DIR", os.path.join(os.path.dirname(REPO_ROOT), "exercise-pose-data"))
+import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
 import warnings
@@ -16,7 +20,7 @@ from tensorflow import keras
 import ffmpeg
 
 import sys
-sys.path.append('/home/kevin/projects/exercise_pose_evaluation_machine/')
+sys.path.append(REPO_ROOT)
 
 from keypoints_extractor import KeypointsExtractor
 from detectors_keras_api.pose_detector_keras import PoseDetector
@@ -28,7 +32,7 @@ from list_manipulator import pop_all
 from image_manipulator import crop_image_based_on_padded_bounded_box
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
-IMAGE_DIR = '/home/kevin/Pictures/save_images'
+IMAGE_DIR = os.path.join(DATA_DIR, 'save_images')
 
 # Exercises ['plank', 'push-up', 'sit-up', 'squat']
 
@@ -46,12 +50,12 @@ def validate_keypoints(keypoints):
 
 
 VIDEO_PATHS = {
-    # "push-up": "/home/kevin/projects/dataset/push-up-k1.mp4",
-    "push-up": "/home/kevin/projects/dataset/IMG_2820.mp4",
-    "sit-up": "/home/kevin/projects/dataset/sit-up-k.mp4",
-    "squat": "/home/kevin/projects/dataset/squat-k.mp4",
-    "plank": "/home/kevin/projects/dataset/plank-k.mp4",
-    # "test": "/home/kevin/Videos/VID_20210116_152545.mp4"
+    # "push-up": os.path.join(DATA_DIR, "dataset/push-up-k1.mp4"),
+    "push-up": os.path.join(DATA_DIR, "dataset/IMG_2820.mp4"),
+    "sit-up": os.path.join(DATA_DIR, "dataset/sit-up-k.mp4"),
+    "squat": os.path.join(DATA_DIR, "dataset/squat-k.mp4"),
+    "plank": os.path.join(DATA_DIR, "dataset/plank-k.mp4"),
+    # "test": os.path.join(DATA_DIR, "VID_20210116_152545.mp4")
 }
 
 
@@ -60,8 +64,8 @@ if __name__ == '__main__':
         # Base paths
         exercise = "push-up" 
         base_path = VIDEO_PATHS[exercise]
-        # base_path = "/home/kevin/projects/dataset/squat-obscured.mp4"
-        # base_path = "/home/kevin/projects/right-hand-up-to-exercise/squat.mp4"
+        # base_path = os.path.join(DATA_DIR, "dataset/squat-obscured.mp4")
+        # base_path = os.path.join(DATA_DIR, "right-hand-up-to-exercise/squat.mp4")
         kp_extractor = KeypointsExtractor()
 
         # Opening OpenCV stream

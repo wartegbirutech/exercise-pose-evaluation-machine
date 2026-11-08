@@ -1,7 +1,11 @@
+import os
+# Repo root and dataset folder (override with EPEM_ROOT / EPEM_DATA_DIR).
+REPO_ROOT = os.environ.get("EPEM_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+DATA_DIR = os.environ.get("EPEM_DATA_DIR", os.path.join(os.path.dirname(REPO_ROOT), "exercise-pose-data"))
 import sys
 import math
 
-sys.path.append('/home/kevin/projects/exercise_pose_evaluation_machine/')
+sys.path.append(REPO_ROOT)
 
 from keypoints_extractor import pop_all
 from db_entity import get_count, get_dataset_with_limit, insert_array_to_db

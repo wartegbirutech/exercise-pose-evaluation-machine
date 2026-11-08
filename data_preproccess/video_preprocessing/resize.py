@@ -1,8 +1,11 @@
 import os
+# Dataset folder (override with EPEM_DATA_DIR).
+DATA_DIR = os.environ.get("EPEM_DATA_DIR", os.path.join(os.path.dirname(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))), "exercise-pose-data"))
+import os
 
 # Define base path for the dataset
-base_path = "/mnt/c/Users/agustinus.theodorus/Videos/Dataset"
-save_base_path = '/mnt/c/Users/agustinus.theodorus/Videos'
+base_path = os.path.join(DATA_DIR, "Videos/Dataset")
+save_base_path = os.path.join(DATA_DIR, 'Videos')
 
 def transform_video(base, folder, filename):
     # Check if dir exists

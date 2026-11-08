@@ -1,4 +1,8 @@
 import os
+# Repo root and dataset folder (override with EPEM_ROOT / EPEM_DATA_DIR).
+REPO_ROOT = os.environ.get("EPEM_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+DATA_DIR = os.environ.get("EPEM_DATA_DIR", os.path.join(os.path.dirname(REPO_ROOT), "exercise-pose-data"))
+import os
 import cv2
 import sys
 import numpy as np
@@ -7,7 +11,7 @@ import collections
 from tensorflow.keras.models import load_model
 
 # Get the local openpose path
-sys.path.append("/home/kevin/projects/exercise_pose_evaluation_machine")
+sys.path.append(REPO_ROOT)
 
 from deep_sort import nn_matching
 from deep_sort import preprocessing
@@ -27,7 +31,7 @@ from list_manipulator import get_exact_frames
 
 def predict_sequence(keypoints, type_name):
     # Base paths
-    save_path = "/home/kevin/projects/exercise_pose_evaluation_machine/models/lstm_model/keras/" + type_name + "/" + type_name + "_lstm_model.h5"
+    save_path = os.path.join(REPO_ROOT, "models/lstm_model/keras/") + type_name + "/" + type_name + "_lstm_model.h5"
 
     # Load model
     model = load_model(save_path)
@@ -42,9 +46,9 @@ def predict_sequence(keypoints, type_name):
 if __name__ == f'__main__':
     # Initialize video path
     # positive
-    base_path = "/home/kevin/projects/dataset-theo/optimized/sit-up/sit-up1.mp4"
+    base_path = os.path.join(DATA_DIR, "dataset-theo/optimized/sit-up/sit-up1.mp4")
     # negative
-    # base_path = '/home/kevin/Desktop/squat-speedup.mp4'
+    # base_path = os.path.join(DATA_DIR, 'squat-speedup.mp4')
 
     # Keypoints 
     NOSE        = 0

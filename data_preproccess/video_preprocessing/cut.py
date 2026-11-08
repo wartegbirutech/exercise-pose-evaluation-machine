@@ -1,10 +1,13 @@
 import os
-from moviepy.editor import *
-from moviepy.video.fx.speedx import speedx
+# Repo root and dataset folder (override with EPEM_ROOT / EPEM_DATA_DIR).
+REPO_ROOT = os.environ.get("EPEM_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+DATA_DIR = os.environ.get("EPEM_DATA_DIR", os.path.join(os.path.dirname(REPO_ROOT), "exercise-pose-data"))
+import os
+from moviepy import VideoFileClip, vfx  # MoviePy 2 API
 
 # Define base path for the dataset
-base_path = "/mnt/c/Users/agustinus.theodorus/Documents/Bandicut/Uncut"
-save_base_path = '/mnt/c/Users/agustinus.theodorus/Documents/Bandicut'
+base_path = os.path.join(DATA_DIR, "Bandicut/Uncut")
+save_base_path = os.path.join(DATA_DIR, 'Bandicut')
 
 def cut_video(folder, filename, count):
     # Get clip duration
@@ -13,7 +16,7 @@ def cut_video(folder, filename, count):
     duration = clip.duration
     
     # Cut video
-    clip = clip.cutout(duration-5, duration)
+    clip = clip.with_section_cut_out(duration-5, duration)
     temp_clip = clip
     temp_count = count
     
@@ -32,7 +35,7 @@ def cut_video(folder, filename, count):
     temp_count+=1
     
     # Flip video
-    temp_clip = temp_clip.fx(vfx.mirror_x)
+    temp_clip = temp_clip.with_effects([vfx.MirrorX()])
 
     # Write flipped video
     temp_clip.write_videofile(save_path + '/' + folder +  str(temp_count) + '.mp4')
@@ -49,7 +52,7 @@ def cut_video(folder, filename, count):
         fin = 1
     else:
         fin = 2
-    clip = speedx(clip=clip, final_duration=fin)
+    clip = clip.with_effects([vfx.MultiplySpeed(final_duration=fin)])
 
     # Define directory
     if not os.path.exists(save_base_path + '/Optimized'):
@@ -65,7 +68,7 @@ def cut_video(folder, filename, count):
     count+=1
     
     # Flip video
-    clip = clip.fx(vfx.mirror_x)
+    clip = clip.with_effects([vfx.MirrorX()])
 
     # Write flipped video
     clip.write_videofile(save_path + '/' + folder +  str(count) + '.mp4', fps=24)

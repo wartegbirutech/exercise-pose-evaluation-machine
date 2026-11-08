@@ -1,11 +1,16 @@
 import os
+# Repo root and dataset folder (override with EPEM_ROOT / EPEM_DATA_DIR).
+REPO_ROOT = os.environ.get("EPEM_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+DATA_DIR = os.environ.get("EPEM_DATA_DIR", os.path.join(os.path.dirname(REPO_ROOT), "exercise-pose-data"))
+import os
 import time
 import random
+import traceback
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 from tensorflow.keras import regularizers
 
 import sys
-sys.path.append('/home/kevin/projects/exercise_pose_evaluation_machine/')
+sys.path.append(REPO_ROOT)
 
 import collections
 import random
@@ -42,13 +47,13 @@ def save_model_summary(summary):
 
 class ExerciseEvaluator:
     def __init__(self, type_name):
-        MODEL_PATH = '/home/kevin/projects/exercise_pose_evaluation_machine/models/lstm_model/keras/' + type_name + '/' + type_name + '_lstm_model.h5'
+        MODEL_PATH = os.path.join(REPO_ROOT, 'models/lstm_model/keras/') + type_name + '/' + type_name + '_lstm_model.h5'
         self.model = load_saved_model(MODEL_PATH)
         self.type_name = type_name
 
     def predict(self, data):
         try:
-            if self.type_name is "sit-up" or self.type_name is "squat":
+            if self.type_name == "sit-up" or self.type_name == "squat":
                 assert data.shape == (1, 48)
             else:
                 assert data.shape == (1, 24)
@@ -58,7 +63,7 @@ class ExerciseEvaluator:
 
 def train(type_name, n_hidden):
     # Initialize save path
-    save_path = "/home/kevin/projects/exercise_pose_evaluation_machine/models/lstm_model/keras/" + type_name + "/" + type_name + "_lstm_model.h5"
+    save_path = os.path.join(REPO_ROOT, "models/lstm_model/keras/") + type_name + "/" + type_name + "_lstm_model.h5"
     # Get original dataset
     x, y = get_dataset(type_name)
     # Fill original class type with the label 1
@@ -167,7 +172,7 @@ if __name__ == '__main__':
     def run(type_name, hidden):
         name = f'{type_name}-{hidden}'
         print("Starting " + name)
-        # log_dir = "/home/kevin/projects/exercise_pose_evaluation_machine/models/training_logs/"
+        # log_dir = os.path.join(REPO_ROOT, "models/training_logs/")
         # date_string = datetime.now().isoformat()
         # sys.stdout= open(os.path.join(log_dir, f'{name}-{date_string}.txt'), 'w')
         train(type_name, hidden)

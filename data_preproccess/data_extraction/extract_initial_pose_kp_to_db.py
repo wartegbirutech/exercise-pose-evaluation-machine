@@ -1,3 +1,7 @@
+import os
+# Repo root and dataset folder (override with EPEM_ROOT / EPEM_DATA_DIR).
+REPO_ROOT = os.environ.get("EPEM_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+DATA_DIR = os.environ.get("EPEM_DATA_DIR", os.path.join(os.path.dirname(REPO_ROOT), "exercise-pose-data"))
 import sys
 import os
 import cv2
@@ -38,8 +42,8 @@ def create_logger():
 
 def run():
     # Initialize paths
-    base_path = "/home/kevin/projects/initial-pose-data/train_data"
-    save_path = "/home/kevin/projects/exercise_pose_evaluation_machine/models/initial_pose_model/initial_pose_model.h5"
+    base_path = os.path.join(DATA_DIR, "initial-pose-data/train_data")
+    save_path = os.path.join(REPO_ROOT, "models/initial_pose_model/initial_pose_model.h5")
 
     # Get dataset folders
     dirs = os.listdir(base_path)

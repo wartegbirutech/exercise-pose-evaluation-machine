@@ -1,10 +1,14 @@
 import os
+# Repo root and dataset folder (override with EPEM_ROOT / EPEM_DATA_DIR).
+REPO_ROOT = os.environ.get("EPEM_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+DATA_DIR = os.environ.get("EPEM_DATA_DIR", os.path.join(os.path.dirname(REPO_ROOT), "exercise-pose-data"))
+import os
 import numpy as np
 import urllib.parse
 from pymongo import MongoClient
 import sys
 
-ROOT_DIR = "/home/kevin/projects/exercise_pose_evaluation_machine"
+ROOT_DIR = REPO_ROOT
 sys.path.append(ROOT_DIR)
 
 from db_entity import insert_np_array_to_db
@@ -88,7 +92,7 @@ if __name__ == '__main__':
     selected_keypoints = [NECK, R_SHOULDER, R_ELBOW, R_WRIST, L_SHOULDER, L_ELBOW, L_WRIST, MID_HIP, R_HIP, R_KNEE, R_ANKLE, L_HIP, L_KNEE, L_ANKLE]
 
     # Initialize dataset path
-    dataset_path = '/home/kevin/projects/dataset-theo/to-insert-to-db'
+    dataset_path = os.path.join(DATA_DIR, 'dataset-theo/to-insert-to-db')
 
     # Define keypoints
     kp_extractor = KeypointsExtractor()

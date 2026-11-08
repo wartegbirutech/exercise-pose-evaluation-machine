@@ -1,4 +1,8 @@
 import os
+# Repo root and dataset folder (override with EPEM_ROOT / EPEM_DATA_DIR).
+REPO_ROOT = os.environ.get("EPEM_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+DATA_DIR = os.environ.get("EPEM_DATA_DIR", os.path.join(os.path.dirname(REPO_ROOT), "exercise-pose-data"))
+import os
 import sys
 import cv2
 
@@ -51,8 +55,8 @@ def create_output_dir(output_base_dir, exercise, output_folder_name):
 
 
 if __name__ == '__main__':
-    source_base_dir = "/home/kevin/projects/initial-pose-data/videos/to-process"
-    output_base_dir = "/home/kevin/projects/initial-pose-data/images/raw"
+    source_base_dir = os.path.join(DATA_DIR, "initial-pose-data/videos/to-process")
+    output_base_dir = os.path.join(DATA_DIR, "initial-pose-data/images/raw")
     #  source_base_dir = get_source_base_dir_arg()
     #  output_base_dir = get_output_base_dir_arg()
 

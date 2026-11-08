@@ -1,3 +1,7 @@
+import os
+# Repo root and dataset folder (override with EPEM_ROOT / EPEM_DATA_DIR).
+REPO_ROOT = os.environ.get("EPEM_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+DATA_DIR = os.environ.get("EPEM_DATA_DIR", os.path.join(os.path.dirname(REPO_ROOT), "exercise-pose-data"))
 import sys
 import os
 import cv2
@@ -8,7 +12,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.model_selection import train_test_split
 
-ROOT_DIR = "/home/kevin/projects/exercise_pose_evaluation_machine"
+ROOT_DIR = REPO_ROOT
 sys.path.append(ROOT_DIR)
 
 from keypoints_extractor import KeypointsExtractor
@@ -65,7 +69,7 @@ if __name__ == "__main__":
 
     # Initialize paths
     # TODO: Setup the train data in 2 folders true and false folders
-    base_path = "/home/kevin/projects/right_hand_up_pose_data/training_data"
+    base_path = os.path.join(DATA_DIR, "right_hand_up_pose_data/training_data")
 
     # Get dataset folders
     dirs = os.listdir(base_path)

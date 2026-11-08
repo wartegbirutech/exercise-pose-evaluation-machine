@@ -1,4 +1,8 @@
 import os
+# Repo root and dataset folder (override with EPEM_ROOT / EPEM_DATA_DIR).
+REPO_ROOT = os.environ.get("EPEM_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+DATA_DIR = os.environ.get("EPEM_DATA_DIR", os.path.join(os.path.dirname(REPO_ROOT), "exercise-pose-data"))
+import os
 import cv2
 import sys
 import numpy as np
@@ -20,7 +24,7 @@ from keypoints_extractor import KeypointsExtractor
 
 def predict_initial_pose(keypoints):
     # Base paths
-    save_path = "/home/kevin/projects/exercise_pose_evaluation_machine/models/initial_pose_model/initial_pose_model.h5"
+    save_path = os.path.join(REPO_ROOT, "models/initial_pose_model/initial_pose_model.h5")
 
     # Prepare keypoints to feed into network
     keypoints = np.array(keypoints).flatten().astype(np.float32)
@@ -36,7 +40,7 @@ def predict_initial_pose(keypoints):
     return res_lookup[np.argmax(model.predict(np.array([keypoints])))]
 
 if __name__ == '__main__':
-    img_test_path = "/home/kevin/projects/Exercise Starting Pose/Pushups/pushupstart9.jpg"
+    img_test_path = os.path.join(DATA_DIR, "Exercise Starting Pose/Pushups/pushupstart9.jpg")
     image = cv2.imread(img_test_path)    
     kp_extractor = KeypointsExtractor()
     list_of_pose_and_id = kp_extractor.get_keypoints_and_id_from_img(image)

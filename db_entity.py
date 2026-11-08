@@ -1,13 +1,15 @@
+import os
 import numpy as np
 import urllib.parse
 from pymongo import MongoClient
 
+# MongoDB holding the extracted keypoints (override with MONGODB_URI).
+MONGODB_URI = os.environ.get("MONGODB_URI", "mongodb://127.0.0.1")
+
 
 class DBEntity():
     def __init__(self):
-        username = urllib.parse.quote_plus('mongo')
-        password = urllib.parse.quote_plus('mongo') 
-        self.conn = MongoClient('mongodb://%s:%s@127.0.0.1' % (username, password))
+        self.conn = MongoClient(MONGODB_URI)
         self.db = self.conn["PoseMachine"]
 
     def convert_np_array_to_list(self, np_array):
@@ -39,9 +41,7 @@ def insert_threshold_to_db(x_threshold, y_threshold, class_name, keypoint_dict):
     # try catch for MongoDB connection
     try: 
         #connect to mongodb instance
-        username = urllib.parse.quote_plus('mongo')
-        password = urllib.parse.quote_plus('mongo') 
-        conn = MongoClient('mongodb://%s:%s@127.0.0.1' % (username, password))
+        conn = MongoClient(MONGODB_URI)
 
         # connect to mongodb database and collection
         db = conn["PoseMachine"]
@@ -80,9 +80,7 @@ def insert_array_to_db(list_of_pose, class_type, class_name):
     # try catch for MongoDB connection
     try: 
         #connect to mongodb instance
-        username = urllib.parse.quote_plus('mongo') 
-        password = urllib.parse.quote_plus('mongo') 
-        conn = MongoClient('mongodb://%s:%s@127.0.0.1' % (username, password))
+        conn = MongoClient(MONGODB_URI)
 
         # connect to mongodb database and collection
         db = conn["PoseMachine"]
@@ -119,9 +117,7 @@ def insert_np_array_to_db(list_of_pose, class_type, class_name):
     # try catch for MongoDB connection
     try: 
         #connect to mongodb instance
-        username = urllib.parse.quote_plus('mongo') 
-        password = urllib.parse.quote_plus('mongo') 
-        conn = MongoClient('mongodb://%s:%s@127.0.0.1' % (username, password))
+        conn = MongoClient(MONGODB_URI)
 
         # connect to mongodb database and collection
         db = conn["PoseMachine"]
@@ -169,9 +165,7 @@ def get_dataset(collection_name):
     # try catch for MongoDB connection
     try: 
         #connect to mongodb instance
-        username = urllib.parse.quote_plus('mongo') 
-        password = urllib.parse.quote_plus('mongo') 
-        conn = MongoClient('mongodb://%s:%s@127.0.0.1' % (username, password))
+        conn = MongoClient(MONGODB_URI)
 
         # connect to mongodb database and collection
         db = conn["PoseMachine"]
@@ -207,9 +201,7 @@ def get_dataset_with_limit(collection_name, required_count, limit):
     # try catch for MongoDB connection
     try: 
         #connect to mongodb instance
-        username = urllib.parse.quote_plus('mongo') 
-        password = urllib.parse.quote_plus('mongo') 
-        conn = MongoClient('mongodb://%s:%s@127.0.0.1' % (username, password))
+        conn = MongoClient(MONGODB_URI)
 
         # connect to mongodb database and collection
         db = conn["PoseMachine"]
@@ -261,9 +253,7 @@ def get_count(collection_name):
     # try catch for MongoDB connection
     try: 
         #connect to mongodb instance
-        username = urllib.parse.quote_plus('mongo') 
-        password = urllib.parse.quote_plus('mongo') 
-        conn = MongoClient('mongodb://%s:%s@127.0.0.1' % (username, password))
+        conn = MongoClient(MONGODB_URI)
 
         # connect to mongodb database and collection
         db = conn["PoseMachine"]
@@ -288,9 +278,7 @@ def insert_initial_pose_to_db(kp_array, exercise_name):
     # try catch for MongoDB connection
     try: 
         #connect to mongodb instance
-        username = urllib.parse.quote_plus('mongo') 
-        password = urllib.parse.quote_plus('mongo') 
-        conn = MongoClient('mongodb://%s:%s@127.0.0.1' % (username, password))
+        conn = MongoClient(MONGODB_URI)
 
         # connect to mongodb database and collection
         db = conn["PoseMachine"]
@@ -320,9 +308,7 @@ def get_initial_pose_dataset():
     # try catch for MongoDB connection
     try: 
         #connect to mongodb instance
-        username = urllib.parse.quote_plus('mongo') 
-        password = urllib.parse.quote_plus('mongo') 
-        conn = MongoClient('mongodb://%s:%s@127.0.0.1' % (username, password))
+        conn = MongoClient(MONGODB_URI)
 
         # connect to mongodb database and collection
         db = conn["PoseMachine"]
@@ -349,9 +335,7 @@ def insert_right_hand_up_pose_to_db(kp_array, label: bool):
     # try catch for MongoDB connection
     try: 
         #connect to mongodb instance
-        username = urllib.parse.quote_plus('mongo') 
-        password = urllib.parse.quote_plus('mongo') 
-        conn = MongoClient('mongodb://%s:%s@127.0.0.1' % (username, password))
+        conn = MongoClient(MONGODB_URI)
 
         # connect to mongodb database and collection
         db = conn["PoseMachine"]
@@ -380,9 +364,7 @@ def get_right_hand_up_dataset(label = None):
     # try catch for MongoDB connection
     try: 
         #connect to mongodb instance
-        username = urllib.parse.quote_plus('mongo') 
-        password = urllib.parse.quote_plus('mongo') 
-        conn = MongoClient('mongodb://%s:%s@127.0.0.1' % (username, password))
+        conn = MongoClient(MONGODB_URI)
 
         # connect to mongodb database and collection
         db = conn["PoseMachine"]
@@ -423,9 +405,7 @@ def get_right_hand_up_dataset(label = None):
 def connect_to_mongo():
     try: 
         #connect to mongodb instance
-        username = urllib.parse.quote_plus('mongo') 
-        password = urllib.parse.quote_plus('mongo') 
-        conn = MongoClient('mongodb://%s:%s@127.0.0.1' % (username, password))
+        conn = MongoClient(MONGODB_URI)
         # connect to mongodb database and collection
         db = conn["PoseMachine"]
         return db

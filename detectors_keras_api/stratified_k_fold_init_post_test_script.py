@@ -1,4 +1,8 @@
 import os
+# Repo root and dataset folder (override with EPEM_ROOT / EPEM_DATA_DIR).
+REPO_ROOT = os.environ.get("EPEM_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+DATA_DIR = os.environ.get("EPEM_DATA_DIR", os.path.join(os.path.dirname(REPO_ROOT), "exercise-pose-data"))
+import os
 import csv
 import time
 import cv2
@@ -13,7 +17,7 @@ from tensorflow.keras import regularizers
 from datetime import datetime
 
 import sys
-sys.path.append('/home/kevin/projects/exercise_pose_evaluation_machine/')
+sys.path.append(REPO_ROOT)
 
 import collections
 import random
@@ -147,7 +151,7 @@ if __name__ == '__main__':
             name += '_2x30'
         date_string = datetime.now().isoformat().replace(':', '.')
         print("Starting " + name)
-        log_dir = "/home/kevin/projects/exercise_pose_evaluation_machine/k_fold_results/training_logs/"
+        log_dir = os.path.join(REPO_ROOT, "k_fold_results/training_logs/")
         sys.stdout= open(os.path.join(log_dir, f'{name}-{date_string}.txt'), 'w')
         train(name, epoch, batch_size, dropout, double, x, y)
         print("Exiting " + name)

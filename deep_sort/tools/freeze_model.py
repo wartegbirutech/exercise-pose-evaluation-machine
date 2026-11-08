@@ -1,7 +1,8 @@
 # vim: expandtab:ts=4:sw=4
 import argparse
-import tensorflow as tf
-import tensorflow.contrib.slim as slim
+import tensorflow.compat.v1 as tf  # TF1 graph code, run in TF2 compatibility mode
+tf.disable_v2_behavior()
+import tf_slim as slim  # tf.contrib.slim was removed in TF2
 
 
 def _batch_norm_fn(x, scope=None):

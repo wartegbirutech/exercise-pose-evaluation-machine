@@ -1,3 +1,7 @@
+import os
+# Repo root and dataset folder (override with EPEM_ROOT / EPEM_DATA_DIR).
+REPO_ROOT = os.environ.get("EPEM_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+DATA_DIR = os.environ.get("EPEM_DATA_DIR", os.path.join(os.path.dirname(REPO_ROOT), "exercise-pose-data"))
 import warnings
 warnings.simplefilter("ignore")
 
@@ -12,7 +16,7 @@ from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import Dense, Dropout
 
 import sys
-sys.path.append('/home/kevin/projects/exercise_pose_evaluation_machine/')
+sys.path.append(REPO_ROOT)
 
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import OneHotEncoder
@@ -29,7 +33,7 @@ def load_saved_model(model_path):
 
 class InitialPoseDetector:
     def __init__(self):
-        MODEL_PATH = '/home/kevin/projects/exercise_pose_evaluation_machine/models/initial_pose_model/initial_pose_model.h5'
+        MODEL_PATH = os.path.join(REPO_ROOT, 'models/initial_pose_model/initial_pose_model.h5')
         self.model = load_saved_model(MODEL_PATH)
 
     def predict(self, data):
@@ -63,8 +67,8 @@ class InitialPoseDetector:
 
 def train():
     # Initialize paths
-    base_path = "/home/kevin/projects/initial-pose-data/train_data"
-    save_path = "/home/kevin/projects/exercise_pose_evaluation_machine/models/initial_pose_model/initial_pose_model.h5"
+    base_path = os.path.join(DATA_DIR, "initial-pose-data/train_data")
+    save_path = os.path.join(REPO_ROOT, "models/initial_pose_model/initial_pose_model.h5")
 
     # Get dataset folders
     dirs = os.listdir(base_path)
@@ -122,7 +126,7 @@ def train():
     print('Accuracy: %.2f' % (accuracy*100))
 
     # Get keypoints from image
-    img_test_path = "/home/kevin/projects/initial-pose-data/images/pos-negs/push-up/pos/push-up47.mp4_24.jpg"
+    img_test_path = os.path.join(DATA_DIR, "initial-pose-data/images/pos-negs/push-up/pos/push-up47.mp4_24.jpg")
     image = cv2.imread(img_test_path)
     list_of_pose_and_id = kp_extractor.get_keypoints_and_id_from_img(image)   
     keypoints = list_of_pose_and_id[0]['Keypoints']

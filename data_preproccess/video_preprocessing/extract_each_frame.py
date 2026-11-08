@@ -1,8 +1,12 @@
 import os
+# Repo root and dataset folder (override with EPEM_ROOT / EPEM_DATA_DIR).
+REPO_ROOT = os.environ.get("EPEM_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+DATA_DIR = os.environ.get("EPEM_DATA_DIR", os.path.join(os.path.dirname(REPO_ROOT), "exercise-pose-data"))
+import os
 import cv2
 
 # Opens the Video file
-path = '/home/binus/projects/exercise-videos'
+path = os.path.join(DATA_DIR, 'exercise-videos')
 files = os.listdir(path)
 for vids in files:
     fname = os.path.splitext(vids)

@@ -1,4 +1,8 @@
 import os
+# Repo root and dataset folder (override with EPEM_ROOT / EPEM_DATA_DIR).
+REPO_ROOT = os.environ.get("EPEM_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+DATA_DIR = os.environ.get("EPEM_DATA_DIR", os.path.join(os.path.dirname(REPO_ROOT), "exercise-pose-data"))
+import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
 import warnings
@@ -9,7 +13,7 @@ import sys
 import numpy as np
 import collections
 
-ROOT_DIR = "/home/kevin/projects/exercise_pose_evaluation_machine"
+ROOT_DIR = REPO_ROOT
 sys.path.append(ROOT_DIR)
 
 from tensorflow.keras.models import Sequential, load_model
@@ -101,7 +105,7 @@ def load_saved_model(model_path):
 
 class RightHandUpDetector:
     def __init__(self):
-        MODEL_PATH = '/home/kevin/projects/exercise_pose_evaluation_machine/models/right_hand_up/right_hand_up.h5'
+        MODEL_PATH = os.path.join(REPO_ROOT, 'models/right_hand_up/right_hand_up.h5')
         self.model = load_saved_model(MODEL_PATH)
     
     '''

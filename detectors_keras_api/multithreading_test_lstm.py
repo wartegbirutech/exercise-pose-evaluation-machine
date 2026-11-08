@@ -1,3 +1,7 @@
+import os
+# Repo root and dataset folder (override with EPEM_ROOT / EPEM_DATA_DIR).
+REPO_ROOT = os.environ.get("EPEM_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+DATA_DIR = os.environ.get("EPEM_DATA_DIR", os.path.join(os.path.dirname(REPO_ROOT), "exercise-pose-data"))
 import gc
 import csv
 import time
@@ -12,7 +16,7 @@ import warnings
 warnings.simplefilter("ignore")
 
 import sys
-sys.path.append('/home/kevin/projects/exercise_pose_evaluation_machine/')
+sys.path.append(REPO_ROOT)
 
 import time
 import random
@@ -202,7 +206,7 @@ if __name__ == '__main__':
                     for batch_size in batch_sizes:
                         filename = f'{thread_name}_lstm_{type_name}_hidden_{n_hidden}_layers_{lstm_layer}_dropout_{dropout}_epoch_{epoch}_batch_size_{batch_size}'
                         date_string = datetime.now().isoformat().replace(':', '.')
-                        log_dir = "/home/kevin/projects/exercise_pose_evaluation_machine/multithreading_test/training_logs/"
+                        log_dir = os.path.join(REPO_ROOT, "multithreading_test/training_logs/")
                         sys.stdout= open(os.path.join(log_dir, f'{filename}-{date_string}.txt'), 'w')
                         train(type_name, filename, n_hidden, lstm_layer, dropout, epoch, batch_size, x, y)
 

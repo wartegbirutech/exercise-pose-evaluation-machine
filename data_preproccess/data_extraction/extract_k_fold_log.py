@@ -1,7 +1,11 @@
 import os
+# Repo root and dataset folder (override with EPEM_ROOT / EPEM_DATA_DIR).
+REPO_ROOT = os.environ.get("EPEM_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+DATA_DIR = os.environ.get("EPEM_DATA_DIR", os.path.join(os.path.dirname(REPO_ROOT), "exercise-pose-data"))
+import os
 
 import sys
-sys.path.append("/home/kevin/projects/exercise_pose_evaluation_machine")
+sys.path.append(REPO_ROOT)
 
 import csv
 import numpy as np
@@ -11,7 +15,7 @@ from list_manipulator import pop_all
 
 # Write headers
 def write_header(folder, filename):
-    base_path = '/home/kevin/projects/exercise_pose_evaluation_machine'
+    base_path = REPO_ROOT
     if not os.path.exists(f'{base_path}/process_results/k_fold'):
         os.mkdir(f'{base_path}/process_results/k_fold')
     if not os.path.exists(f'{base_path}/process_results/k_fold/{folder}'):
@@ -24,7 +28,7 @@ def write_header(folder, filename):
 
 # Write headers
 def write_body(folder, filename, data):
-    base_path = '/home/kevin/projects/exercise_pose_evaluation_machine'
+    base_path = REPO_ROOT
     if not os.path.exists(f'{base_path}/process_results/k_fold'):
         os.mkdir(f'{base_path}/process_results/k_fold')
     if not os.path.exists(f'{base_path}/process_results/k_fold/{folder}'):
@@ -37,7 +41,7 @@ def write_body(folder, filename, data):
 
 # Write average
 def write_avg_body(folder, filename, data):
-    base_path = '/home/kevin/projects/exercise_pose_evaluation_machine'
+    base_path = REPO_ROOT
     if not os.path.exists(f'{base_path}/process_results/k_fold'):
         os.mkdir(f'{base_path}/process_results/k_fold')
     if not os.path.exists(f'{base_path}/process_results/k_fold/{folder}'):
@@ -62,7 +66,7 @@ def list_dict_to_dict_list(data):
         
 # Plot the data into an image
 def plot_log_and_save(folder, filename, d):
-    base_path = '/home/kevin/projects/exercise_pose_evaluation_machine'
+    base_path = REPO_ROOT
     if not os.path.exists(f'{base_path}/process_results/k_fold'):
         os.mkdir(f'{base_path}/process_results/k_fold')
     if not os.path.exists(f'{base_path}/process_results/k_fold/{folder}'):
@@ -152,7 +156,7 @@ if __name__ == "__main__":
 
     # Initialize logs path
     k = 10
-    log_path = '/home/kevin/projects/exercise_pose_evaluation_machine/k_fold_results/training_logs/'
+    log_path = os.path.join(REPO_ROOT, 'k_fold_results/training_logs/')
     
     # Get all files from folder
     file_list = os.listdir(log_path)
