@@ -9,13 +9,12 @@ import os
 import cv2
 import urllib
 from pymongo import MongoClient
+from db_entity import MONGODB_URI
 
 def connect_to_mongo():
     try: 
         #connect to mongodb instance
-        username = urllib.parse.quote_plus('mongo') 
-        password = urllib.parse.quote_plus('mongo') 
-        conn = MongoClient('mongodb://%s:%s@127.0.0.1' % (username, password))
+        conn = MongoClient(MONGODB_URI)
         # connect to mongodb database and collection
         db = conn["PoseMachine"]
         return db
