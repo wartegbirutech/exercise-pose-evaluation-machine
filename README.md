@@ -1,7 +1,5 @@
 # Fitcam: Exercise Pose Evaluation Machine
 
-## Introduction
-
 This repository contains code for *Fitcam: detecting and counting repetitive exercises with deep learning*
 ([Journal of Big Data, 2024](https://doi.org/10.1186/s40537-024-00915-8)).
 
@@ -18,8 +16,8 @@ The code as it was for the paper (TensorFlow 1.15) is on the [`original`](../../
 Clone the repository and install the Python dependencies with [uv](https://docs.astral.sh/uv/):
 
 ```
-git clone https://github.com/wartegbirutech/exercise-pose-evaluation-machine.git
-cd exercise-pose-evaluation-machine
+git clone https://github.com/wartegbirutech/fitcam-exercise-pose-evaluation-machine.git
+cd fitcam-exercise-pose-evaluation-machine
 uv sync
 ```
 

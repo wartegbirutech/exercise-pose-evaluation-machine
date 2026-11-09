@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite the paper below."
-title: "Exercise Pose Evaluation Machine (Fitcam)"
+title: "Fitcam: Exercise Pose Evaluation Machine"
 type: software
 authors:
   - family-names: Janada
@@ -8,7 +8,7 @@ authors:
   - family-names: Theodorus
     given-names: Agustinus
 license: GPL-3.0-only
-repository-code: "https://github.com/wartegbirutech/exercise-pose-evaluation-machine"
+repository-code: "https://github.com/wartegbirutech/fitcam-exercise-pose-evaluation-machine"
 keywords:
   - human activity recognition
   - pose estimation

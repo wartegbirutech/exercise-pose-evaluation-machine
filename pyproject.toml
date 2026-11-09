@@ -1,7 +1,7 @@
 [project]
 name = "exercise-pose-evaluation-machine"
 version = "2.0.0"
-description = "Real-time exercise pose evaluation in a crowded environment using LSTM (Fitcam)"
+description = "Fitcam: real-time exercise pose evaluation in a crowded environment using LSTM"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
