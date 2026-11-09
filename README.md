@@ -2,10 +2,13 @@
 
 Real time exercise pose evaluation in a crowded environtment using Long Short-Term Memory.
 
+Code for *Fitcam: detecting and counting repetitive exercises with deep learning*, Journal of Big Data 11, 101 (2024),
+doi:[10.1186/s40537-024-00915-8](https://doi.org/10.1186/s40537-024-00915-8).
+
 ## Branches
 
 - **`master`**: modernised for Python 3.11+ and TensorFlow 2 / Keras 3, managed with [uv](https://docs.astral.sh/uv/).
-- **[`original`](../../tree/original)**: the code as it was in January 2021 (TensorFlow 1.15, Python ≤ 3.7, commit `96ea402`).
+- **[`original`](../../tree/original)**: the code as it was in January 2021 (TensorFlow 1.15, Python ≤ 3.7, commit `95a8574`).
 
 ## Requirements
 
@@ -66,3 +69,34 @@ OpenPose pipeline. These need a TensorFlow-capable machine, OpenPose and the dat
 
 Known issues carried over from `original` (not changed): the `__main__` demo code in `initial_pose_detector_keras.py`
 references undefined `kp_extractor` / `KeypointsExtractor`, and `keypoints_extractor.py` line 1182 references an undefined `keypoint`.
+
+## Citing
+
+If you use this code, please cite the paper. GitHub's **"Cite this repository"** button (from
+[`CITATION.cff`](CITATION.cff)) gives this in APA and BibTeX:
+
+```bibtex
+@article{japhne2024fitcam,
+  author  = {Japhne, Ferdinandz and Janada, Kevin and Theodorus, Agustinus and Chowanda, Andry},
+  title   = {Fitcam: detecting and counting repetitive exercises with deep learning},
+  journal = {Journal of Big Data},
+  volume  = {11},
+  pages   = {101},
+  year    = {2024},
+  doi     = {10.1186/s40537-024-00915-8}
+}
+```
+
+Tracking uses [Deep SORT](https://github.com/nwojke/deep_sort) (Wojke, Bewley & Paulus, ICIP 2017,
+doi:[10.1109/ICIP.2017.8296962](https://doi.org/10.1109/ICIP.2017.8296962)), included in `deep_sort/`.
+
+## License
+
+[GPL-3.0](LICENSE). The vendored Deep SORT code is GPL-3.0, and the rest of the project uses the same licence so the
+whole program has one licence.
+
+## Repository history
+
+The whole history (all branches) was rewritten in November 2026 to add the licence to every commit. Commits by other
+contributors keep their original author and carry a `Co-authored-by` trailer for the maintainer. Commit hashes from
+before November 2026 no longer exist.

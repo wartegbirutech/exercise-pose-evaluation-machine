@@ -1,0 +1,54 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the paper below."
+title: "Exercise Pose Evaluation Machine (Fitcam)"
+type: software
+authors:
+  - family-names: Janada
+    given-names: Kevin
+  - family-names: Theodorus
+    given-names: Agustinus
+license: GPL-3.0-only
+repository-code: "https://github.com/wartegbirutech/exercise-pose-evaluation-machine"
+keywords:
+  - human activity recognition
+  - pose estimation
+  - long short-term memory
+  - exercise evaluation
+preferred-citation:
+  type: article
+  title: "Fitcam: detecting and counting repetitive exercises with deep learning"
+  authors:
+    - family-names: Japhne
+      given-names: Ferdinandz
+      affiliation: Bina Nusantara University
+    - family-names: Janada
+      given-names: Kevin
+      affiliation: Bina Nusantara University
+    - family-names: Theodorus
+      given-names: Agustinus
+      affiliation: Bina Nusantara University
+    - family-names: Chowanda
+      given-names: Andry
+      affiliation: Bina Nusantara University
+  journal: "Journal of Big Data"
+  volume: 11
+  start: 101
+  year: 2024
+  publisher:
+    name: Springer Nature
+  doi: 10.1186/s40537-024-00915-8
+  url: "https://doi.org/10.1186/s40537-024-00915-8"
+references:
+  - type: conference-paper
+    title: "Simple Online and Realtime Tracking with a Deep Association Metric"
+    authors:
+      - family-names: Wojke
+        given-names: Nicolai
+      - family-names: Bewley
+        given-names: Alex
+      - family-names: Paulus
+        given-names: Dietrich
+    collection-title: "2017 IEEE International Conference on Image Processing (ICIP)"
+    year: 2017
+    doi: 10.1109/ICIP.2017.8296962
+    notes: "Deep SORT, vendored in deep_sort/ (GPL-3.0, https://github.com/nwojke/deep_sort)."
